@@ -158,4 +158,4 @@ MIT
 
 ---
 
-Built by [IA Art](https://iaart.art)
+Built by IA Art
