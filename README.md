@@ -158,5 +158,4 @@ MIT
 
 ---
 
-Built by [IA Art](https://iaart.art) — Pazardzhik, Bulgaria  
-Contact: office@iaart.art
+Built by [IA Art](https://iaart.art)
