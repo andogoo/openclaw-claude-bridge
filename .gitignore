@@ -1,0 +1,12 @@
+config.json
+*.env
+.env*
+logs/
+*.log
+node_modules/
+.DS_Store
+credentials*
+*token*
+*secret*
+*password*
+openclaw.json

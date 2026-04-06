@@ -1,0 +1,12 @@
+{
+  "port": 18790,
+  "tmux_session": "claude-code",
+  "telegram_chat_id": "YOUR_TELEGRAM_CHAT_ID",
+  "telegram_bot_token": "YOUR_BOT_TOKEN",
+  "openclaw_bin": "/opt/homebrew/bin/openclaw",
+  "response_file": "/tmp/claude-bridge-response.json",
+  "timeout_ms": 300000,
+  "claude_cli_path": "/opt/homebrew/bin/claude",
+  "working_directory": "~",
+  "log_file": "~/.openclaw/logs/claude-bridge.log"
+}
