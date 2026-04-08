@@ -12,7 +12,7 @@ CONFIG="$ROOT_DIR/config.json"
 PORT=$(jq -r '.port // 18790' "$CONFIG" 2>/dev/null || echo 18790)
 TMUX_SESSION=$(jq -r '.tmux_session // "claude-code"' "$CONFIG" 2>/dev/null || echo "claude-code")
 LOG_FILE=$(jq -r '.log_file // ""' "$CONFIG" 2>/dev/null | sed "s|~|$HOME|")
-TMUX=$(which tmux 2>/dev/null || echo "/opt/homebrew/bin/tmux")
+TMUX=$(which tmux 2>/dev/null || echo "tmux")
 CHECK_INTERVAL=30
 
 log() {

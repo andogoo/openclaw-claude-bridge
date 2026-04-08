@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# stop.sh — Stop the Claude Code ↔ OpenClaw bridge
+# stop.sh — Stop the Claude Code bridge
 # Usage: stop.sh [--kill-tmux]
 
 set -euo pipefail
@@ -13,7 +13,7 @@ NC='\033[0m'
 ok() { echo -e "${GREEN}✓${NC} $1"; }
 
 TMUX_SESSION=$(jq -r '.tmux_session // "claude-code"' "$CONFIG" 2>/dev/null || echo "claude-code")
-TMUX=$(which tmux 2>/dev/null || echo "/opt/homebrew/bin/tmux")
+TMUX=$(which tmux 2>/dev/null || echo "tmux")
 
 echo "Stopping Claude Code bridge..."
 
@@ -32,6 +32,9 @@ if [ -n "$PIDS" ]; then
   kill $PIDS 2>/dev/null
   ok "Watchdog stopped"
 fi
+
+# Clean up temp files
+rm -f /tmp/claude-bridge.lock /tmp/claude-bridge-active-job.json
 
 # Kill tmux session only if --kill-tmux
 if [ "${1:-}" = "--kill-tmux" ]; then

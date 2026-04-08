@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# start.sh — Start the Claude Code ↔ OpenClaw bridge
+# start.sh — Start the Claude Code bridge
 # Usage: start.sh [--attach]
 
 set -euo pipefail
@@ -20,7 +20,7 @@ warn() { echo -e "${YELLOW}!${NC} $1"; }
 
 # Load config
 if [ ! -f "$CONFIG" ]; then
-  fail "config.json not found. Run install.sh first."
+  fail "config.json not found. Copy config.example.json and fill in your values."
   exit 1
 fi
 
@@ -29,11 +29,11 @@ TMUX_SESSION=$(jq -r '.tmux_session // "claude-code"' "$CONFIG")
 CLAUDE_CLI=$(jq -r '.claude_cli_path // "claude"' "$CONFIG" | sed "s|~|$HOME|")
 WORK_DIR=$(jq -r '.working_directory // "~"' "$CONFIG" | sed "s|~|$HOME|")
 LOG_FILE=$(jq -r '.log_file // ""' "$CONFIG" | sed "s|~|$HOME|")
-TMUX=$(which tmux 2>/dev/null || echo "/opt/homebrew/bin/tmux")
-NODE=$(which node 2>/dev/null || echo "/opt/homebrew/bin/node")
+TMUX=$(which tmux 2>/dev/null || echo "tmux")
+NODE=$(which node 2>/dev/null || echo "node")
 
 echo "═══════════════════════════════════════"
-echo "  Claude Code ↔ OpenClaw Bridge"
+echo "  Claude Code ↔ OpenClaw Bridge v2"
 echo "═══════════════════════════════════════"
 echo ""
 
@@ -43,10 +43,10 @@ if $TMUX has-session -t "$TMUX_SESSION" 2>/dev/null; then
 else
   warn "Starting tmux session '$TMUX_SESSION'..."
   $TMUX new-session -d -s "$TMUX_SESSION" \
-    "/bin/bash -c 'export PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; cd $WORK_DIR; $CLAUDE_CLI --dangerously-skip-permissions; exec bash'"
+    "/bin/bash -c 'cd $WORK_DIR; $CLAUDE_CLI --dangerously-skip-permissions; exec bash'"
   sleep 5
 
-  # Accept trust prompt
+  # Accept trust prompt if needed
   $TMUX send-keys -t "$TMUX_SESSION:0.0" Enter
   sleep 3
 
@@ -83,6 +83,8 @@ echo "  Status"
 echo "═══════════════════════════════════════"
 echo -e "  tmux session:  ${GREEN}$TMUX_SESSION${NC}"
 echo -e "  bridge server: ${GREEN}http://localhost:$PORT${NC}"
+echo -e "  status:        ${GREEN}http://localhost:$PORT/status${NC}"
+echo -e "  SSE events:    ${GREEN}http://localhost:$PORT/events${NC}"
 if [ -n "$LOG_FILE" ]; then
   echo -e "  log file:      $LOG_FILE"
 fi
